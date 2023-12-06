@@ -8,7 +8,7 @@ from selenium.common.exceptions import TimeoutException
 import time
 
 # Setze den Pfad zum ausführbaren ChromeDriver
-chromedriver_path = 'C:\\3bwi\\chromedriver_win32\\chromedriver.exe'
+chromedriver_path = 'C:\\3bwi\\SWP\\Schoolmanager\\chromedriver_win32\\chromedriver.exe'
 
 # Setze die Chrome-Optionen
 chrome_options = webdriver.ChromeOptions()
