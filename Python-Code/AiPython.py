@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 # Setze den Pfad zum ausführbaren ChromeDriver
@@ -73,8 +74,33 @@ try:
 except TimeoutException:
     print("Zeitüberschreitung beim Warten auf das Erscheinen des Texts 'HTL Dornbirn'.")
 
-# Halte das Skript am Laufen, bis der Benutzer sich entscheidet zu beenden
-input("Drücke Enter, um zu beenden...")
+# Logging
+print("Clicked on 'HTL Dornbirn'")
 
-# Schließe das Browserfenster
-driver.quit()
+# Warte darauf, dass der Stundenplan-Link sichtbar wird und klicke darauf (ersetze dies durch den tatsächlichen Locator)
+try:
+    WebDriverWait(driver, 10).until(
+        EC.invisibility_of_element_located((By.XPATH, '//*[@id="loader"]'))
+    )
+    print("Seite vollständig geladen.")
+except TimeoutException:
+    print("Zeitüberschreitung beim Warten auf das vollständige Laden der Seite.")
+
+for _ in range(12):
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+
+# Drücke ENTER
+ActionChains(driver).send_keys(Keys.ENTER).perform()
+
+# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
+time.sleep(5)
+
+for _ in range(5):
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+
+# Drücke ENTER
+ActionChains(driver).send_keys(Keys.ENTER).perform()
+
+# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
+time.sleep(60)
+
