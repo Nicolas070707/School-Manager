@@ -1,0 +1,4 @@
+was zu machen ist für nico und noah:
+
+python -m pip install opencv-python  //in Terminal eingeben wenns nicht geht 
+nur pip versuchen oder pip3 
