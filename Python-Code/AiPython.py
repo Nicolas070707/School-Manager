@@ -7,6 +7,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 import time
+import sys
+import re
+
+# Ausgabe der Python- und PIP-Versionen
+print("Python-Version:", sys.version)
+print("PIP-Version:")
+try:
+    import pip
+    print(pip.__version__)
+except ImportError:
+    print("PIP ist nicht installiert oder nicht gefunden.")
 
 # Setze den Pfad zum ausführbaren ChromeDriver
 chromedriver_path = 'C:\\3bwi\\SWP\\Schoolmanager\\chromedriver_win32\\chromedriver.exe'
@@ -20,6 +31,8 @@ driver = webdriver.Chrome(options=chrome_options)
 
 # Navigiere zu Google
 driver.get('https://www.google.com')
+
+time.sleep(5)
 
 # Finde das Suchfeldelement anhand seines Namen-Attributs (könnte sich im Laufe der Zeit ändern)
 search_bar = driver.find_element(By.NAME, 'q')
@@ -86,21 +99,69 @@ try:
 except TimeoutException:
     print("Zeitüberschreitung beim Warten auf das vollständige Laden der Seite.")
 
-for _ in range(12):
-    ActionChains(driver).send_keys(Keys.TAB).perform()
+# Klicken auf das gefundene Template, wenn es über dem Schwellenwert liegt
 
-# Drücke ENTER
-ActionChains(driver).send_keys(Keys.ENTER).perform()
+# Setzen Sie den Fokus auf das erste fokussierbare Element der Seite
+first_focusable_element = driver.find_element(By.TAG_NAME, 'body')
+first_focusable_element.click()
 
-# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
+for _ in range(100):  # Begrenzen Sie die Anzahl der Versuche
+    # Drücken Sie die Tabulator-Taste
+    first_focusable_element.send_keys(Keys.TAB)
+    time.sleep(0.5)  # Kurze Verzögerung
+
+    # Überprüfen Sie das aktuell fokussierte Element
+    focused_element_text = driver.execute_script(
+        "return document.activeElement.textContent || document.activeElement.innerText;"
+    )
+
+    if "Office" in focused_element_text:
+        print("Das Wort 'Office' gefunden und fokussiert.")
+        time.sleep(1)  # Kurze Wartezeit
+        break
+driver.switch_to.active_element.send_keys(Keys.ENTER)
+
 time.sleep(5)
 
-for _ in range(5):
-    ActionChains(driver).send_keys(Keys.TAB).perform()
+driver.switch_to.active_element.send_keys('nicolas.theiner@student.htldornbirn.at')
 
-# Drücke ENTER
-ActionChains(driver).send_keys(Keys.ENTER).perform()
+time.sleep(40)
 
-# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
-time.sleep(60)
+# Maximiere das Browser-Fenster auf Vollbild
+driver.fullscreen_window()
+
+time.sleep(5)
+
+# Funktion, um die Farbe in allen Elementen zu überprüfen
+def rgba_to_rgb(color):
+    """Konvertiert RGBA zu RGB, falls nötig."""
+    match = re.match(r'rgba\((\d+), (\d+), (\d+), [\d.]+\)', color)
+    if match:
+        return f'rgb({match.group(1)}, {match.group(2)}, {match.group(3)})'
+    return color
+# Stellen Sie sicher, dass die Farbe im richtigen Format ist
+color_to_check = 'rgb(196, 198, 198)' # #dedfdf in RGB
+def check_color_in_elements(driver, color):
+    elements = driver.find_elements(By.XPATH, "//*")
+    for element in elements:
+        background_color = element.value_of_css_property('background-color')
+        color_property = element.value_of_css_property('color')
+
+        # Konvertiere die Farben von RGBA zu RGB, falls nötig
+        background_color = rgba_to_rgb(background_color)
+        color_property = rgba_to_rgb(color_property)
+
+        if color in [background_color, color_property]:
+            print(f"Farbe gefunden in Element mit Tag: {element.tag_name}, Klasse: {element.get_attribute('class')}, ID: {element.get_attribute('id')}")
+            return True
+
+    return False
+
+# Überprüfe, ob die Farbe vorhanden ist
+if check_color_in_elements(driver, color_to_check):
+    print("Farbcode gefunden.")
+else:
+    print("Farbcode nicht gefunden.")
+
+time.sleep(180)
 
