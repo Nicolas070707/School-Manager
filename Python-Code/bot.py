@@ -1,3 +1,4 @@
+import subprocess
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
@@ -27,6 +28,7 @@ def handle_response(text:str) -> str:
         return 'I am good'
 
     if 'webuntis' in processed:
+        subprocess.run(['python', 'Python-Code/AiPython.py'])
         return 'Checking Webuntis'
 
     return 'I do not understand what you wrote'

@@ -1,15 +1,13 @@
-# Importiere die erforderlichen Module von Selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.action_chains import ActionChains
-import time
+import time  # Füge diese Zeile hinzu
 
 # Setze den Pfad zum ausführbaren ChromeDriver
-chromedriver_path = 'C:\\3bwi\\SWP\\Schoolmanager\\chromedriver_win32\\chromedriver.exe'
+chromedriver_path = 'C:\\3bwi\\chromedriver_win32\\chromedriver.exe'
 
 # Setze die Chrome-Optionen
 chrome_options = webdriver.ChromeOptions()
@@ -20,6 +18,16 @@ driver = webdriver.Chrome(options=chrome_options)
 
 # Navigiere zu Google
 driver.get('https://www.google.com')
+
+# Warte auf das Cookie-Banner
+try:
+    cookie_banner = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="introAgreeButton"]'))
+    )
+    # Klicke auf die Schaltfläche zum Akzeptieren von Cookies
+    cookie_banner.click()
+except TimeoutException:
+    print("Zeitüberschreitung beim Warten auf das Cookie-Banner.")
 
 # Finde das Suchfeldelement anhand seines Namen-Attributs (könnte sich im Laufe der Zeit ändern)
 search_bar = driver.find_element(By.NAME, 'q')
@@ -54,11 +62,9 @@ driver.switch_to.active_element.send_keys(Keys.RETURN)
 
 # Warte für 5 Sekunden
 time.sleep(5)
-
-# Warte darauf, dass der Stundenplan-Link sichtbar wird und klicke darauf (ersetze dies durch den tatsächlichen Locator)
 try:
-    WebDriverWait(driver, 20).until(
-        EC.invisibility_of_element_located((By.XPATH, '//*[@id="loader"]'))
+    WebDriverWait(driver, 20).until_not(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="loader"]'))
     )
     print("Seite vollständig geladen.")
 except TimeoutException:
@@ -74,33 +80,11 @@ try:
 except TimeoutException:
     print("Zeitüberschreitung beim Warten auf das Erscheinen des Texts 'HTL Dornbirn'.")
 
-# Logging
-print("Clicked on 'HTL Dornbirn'")
+# Warte für 15 Sekunden
+time.sleep(15)
 
-# Warte darauf, dass der Stundenplan-Link sichtbar wird und klicke darauf (ersetze dies durch den tatsächlichen Locator)
-try:
-    WebDriverWait(driver, 10).until(
-        EC.invisibility_of_element_located((By.XPATH, '//*[@id="loader"]'))
-    )
-    print("Seite vollständig geladen.")
-except TimeoutException:
-    print("Zeitüberschreitung beim Warten auf das vollständige Laden der Seite.")
+# Halte das Skript am Laufen, bis der Benutzer sich entscheidet zu beenden
+input("Drücke Enter, um zu beenden...")
 
-for _ in range(12):
-    ActionChains(driver).send_keys(Keys.TAB).perform()
-
-# Drücke ENTER
-ActionChains(driver).send_keys(Keys.ENTER).perform()
-
-# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
-time.sleep(5)
-
-for _ in range(5):
-    ActionChains(driver).send_keys(Keys.TAB).perform()
-
-# Drücke ENTER
-ActionChains(driver).send_keys(Keys.ENTER).perform()
-
-# Warte für 5 Sekunden, um das Ergebnis zu sehen (du kannst die Zeit nach Bedarf anpassen)
-time.sleep(60)
-
+# Schließe das Browserfenster
+driver.quit()
