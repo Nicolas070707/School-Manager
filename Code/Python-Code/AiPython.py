@@ -32,10 +32,10 @@ driver = webdriver.Chrome(options=chrome_options)
 
 # Navigiere zu Google
 driver.get('https://www.google.com')
-
+ActionChains(driver).send_keys(Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER).perform()
 time.sleep(5)
 
-ActionChains(driver).send_keys(Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER).perform()
+
 
 # Finde das Suchfeldelement anhand seines Namen-Attributs (könnte sich im Laufe der Zeit ändern)
 search_bar = driver.find_element(By.NAME, 'q')
