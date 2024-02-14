@@ -32,10 +32,10 @@ driver = webdriver.Chrome(options=chrome_options)
 
 # Navigiere zu Google
 driver.get('https://www.google.com')
-ActionChains(driver).send_keys(Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER).perform()
+
 time.sleep(5)
 
-
+ActionChains(driver).send_keys(Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER).perform()
 
 # Finde das Suchfeldelement anhand seines Namen-Attributs (könnte sich im Laufe der Zeit ändern)
 search_bar = driver.find_element(By.NAME, 'q')
@@ -140,8 +140,10 @@ time.sleep(5)
 
 driver.switch_to.active_element.send_keys(Keys.ENTER)
 
-first_focusable_element = driver.find_element(By.TAG_NAME, 'body')
-first_focusable_element.click()
+#first_focusable_element = driver.find_element(By.TAG_NAME, 'body')
+#first_focusable_element.click()
+
+
 
 for _ in range(100):  # Begrenzen Sie die Anzahl der Versuche
     # Drücken Sie die Tabulator-Taste
@@ -159,10 +161,10 @@ for _ in range(100):  # Begrenzen Sie die Anzahl der Versuche
         time.sleep(1)  # Kurze Wartezeit
         break
 
+driver.switch_to.active_element.send_keys(Keys.ENTER)
 
 time.sleep(5)
 
-driver.execute_script("document.body.style.zoom='50%'")
 
 time.sleep(5)
 # Maximiere das Browser-Fenster auf Vollbild
