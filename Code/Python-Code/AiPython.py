@@ -169,4 +169,3 @@ time.sleep(5)
 driver.fullscreen_window()
 
 time.sleep(180)
-
