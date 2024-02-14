@@ -7,7 +7,7 @@ from fuzzywuzzy import process
 
 Token: Final = '6522414111:AAFMWw2lS-3hs80eh0EybYfgHMsJa3fD2eg'
 BOT_USERNAME: Final = '@School-Managerbot'
-
+#yeah
 FAQ = {
     'how are you': 'I am fine, thank you! And how are you?',
     'what is your name': 'My name is ChatGPT.',
