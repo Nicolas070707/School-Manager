@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ausgefallene Stunden</title>
+</head>
+<body>
+    <h1>Ausgefallene Stunden</h1>
+    <div id="output"></div>
+    <button id="getDataButton">Stunden abfragen</button>
+
+    <!-- Einbindung von Axios über ein Skript-Tag von einem CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.getElementById('getDataButton').addEventListener('click', async function() {
+            const schulnummer = '7054400';
+            const schule = 'bg-dornbirn';
+            const baseUrl = 'https://klio.webuntis.com/WebUntis/jsonrpc.do';
+            const benutzer = 'RappLea';
+            const schluessel = '46CH7OOCZBFNWGKR';
+
+            try {
+                // Authentifizierung
+                const authResponse = await axios.post(baseUrl, {
+                    id: 1,
+                    method: 'authenticate',
+                    params: {
+                        user: benutzer,
+                        password: schluessel,
+                        client: 'CLIENT'
+                    }
+                });
+                const sessionId = authResponse.data.result.sessionId;
+
+                // Abfrage des Stundenplans für heute
+                const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+                const timetableResponse = await axios.post(baseUrl, {
+                    id: 2,
+                    method: 'getTimetable',
+                    params: {
+                        startDate: today,
+                        endDate: today,
+                        elementType: 1,
+                        departmentId: 1 // Assuming department ID 1 for simplicity, you may need to adjust this
+                    },
+                    sessionId: sessionId
+                });
+
+                // Ausgabe der abgesagten Stunden
+                const lessons = timetableResponse.data.result.data;
+                let cancelledLessons = lessons.filter(lesson => lesson.code === 'cancelled');
+                if (cancelledLessons.length > 0) {
+                    document.getElementById('output').innerHTML = 'Ausfallende Stunden heute:<br>';
+                    cancelledLessons.forEach(lesson => {
+                        document.getElementById('output').innerHTML += `${lesson.startTime} - ${lesson.endTime}: ${lesson.subjects.join(', ')}<br>`;
+                    });
+                } else {
+                    document.getElementById('output').innerHTML = 'Keine Stunden fallen heute aus.';
+                }
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Daten:', error.message);
+                document.getElementById('output').innerHTML = 'Fehler beim Abrufen der Daten. Bitte versuchen Sie es später erneut.';
+            }
+        });
+    </script>
+</body>
+</html>

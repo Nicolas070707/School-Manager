@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="login.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Login-Seite</title>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>School-Manager</h1>
+      <form>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          placeholder="Email/Username"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          required
+        />
+        <div class="buttons">
+          <button
+            type="button"
+            onclick="login()"
+            class="button-52"
+            role="button"
+          >
+            Login
+          </button>
+          <button type="button" class="button-52" role="button">Submit</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
