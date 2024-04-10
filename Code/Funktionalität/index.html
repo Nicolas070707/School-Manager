@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/src/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+    <title>School-Manager</title>
+</head>
+<body>
+
+  <div id="addMenu" class="add-menu">
+    <button onclick="addNewWidget('Cancelled Lessons')">Cancelled Lessons</button>
+    <button onclick="addNewWidget('Note')">Note</button>
+    <button onclick="addNewWidget('Upload Picture')">Upload Picture</button>
+</div>
+
+<div id="footer">
+    <button id="addButton" onclick="toggleAddMenu()">Add New Widget</button>
+</div>
+
+<div id="app"></div>
+
+<div class="header">
+    <div class="currentDate">
+        <p id="currentDate"></p>
+    </div>
+</div>
+
+<div id="sidebar">
+    <h2>Sidebar</h2>
+    <p>User</p>
+</div>
+
+<div id="widget1" class="widget draggable-widget" style="top: 50px; left: 50px;">
+    <div class="widget-content" contenteditable="true">
+        Write your notes here...
+    </div>
+</div>
+
+<div id="widget2" class="widget draggable-widget" style="top: 150px; left: 150px;">
+    <h2>Cancelled lessons</h2>
+    <p>balblalbla</p>
+</div>
+
+<div id="uploadedImageContainer" class="uploaded-image-container" style="display: none;"></div>
+
+<script>
+    // Datum
+    var currentDateElement = document.getElementById("currentDate");
+
+    var currentDate = new Date();
+    var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    var formattedDate = currentDate.toLocaleDateString('en-US', options);
+
+    currentDateElement.textContent = formattedDate;
+
+    // Widgets
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
+    }
+
+    document.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    document.addEventListener("drop", function (event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+
+        var offsetX = event.clientX - draggedElement.clientWidth / 2;
+        var offsetY = event.clientY - draggedElement.clientHeight / 2;
+
+        draggedElement.style.left = offsetX + "px";
+        draggedElement.style.top = offsetY + "px";
+    });
+
+    // Notes
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    const widget1 = document.getElementById('widget1');
+
+    widget1.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - widget1.getBoundingClientRect().left;
+        offsetY = e.clientY - widget1.getBoundingClientRect().top;
+        widget1.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+            widget1.style.left = x + 'px';
+            widget1.style.top = y + 'px';
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        widget1.style.cursor = 'grab';
+        localStorage.setItem('widget1_left', widget1.style.left);
+        localStorage.setItem('widget1_top', widget1.style.top);
+    });
+
+    function toggleAddMenu() {
+        var addMenu = document.getElementById("addMenu");
+        addMenu.classList.toggle("show");
+        if (addMenu.classList.contains("show")) {
+            var addButton = document.getElementById("addButton");
+            var rect = addButton.getBoundingClientRect();
+            addMenu.style.bottom = (rect.height + 20) + "px";
+        }
+    }
+
+    function addNewWidget(widgetType) {
+        var newWidget;
+        switch (widgetType) {
+            case 'Cancelled Lessons':
+                newWidget = createCancelledLessonsWidget();
+                break;
+            case 'Note':
+                newWidget = createNoteWidget();
+                break;
+            case 'Upload Picture':
+                newWidget = createUploadPictureWidget();
+                break;
+            default:
+                return;
+        }
+        document.body.appendChild(newWidget);
+        toggleAddMenu();
+
+       
+        var centerX = window.innerWidth / 2 - 100;
+        var centerY = window.innerHeight / 2 - 75;
+        newWidget.style.left = centerX + 'px';
+        newWidget.style.top = centerY + 'px';
+        
+        makeWidgetDraggable(newWidget);
+        toggleAddMenu();
+    }
+
+    function makeWidgetDraggable(widget) {
+        let isDragging = false;
+        let offsetX, offsetY;
+        widget.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - widget.getBoundingClientRect().left;
+            offsetY = e.clientY - widget.getBoundingClientRect().top;
+            widget.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                widget.style.left = x + 'px';
+                widget.style.top = y + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            widget.style.cursor = 'grab';
+            saveWidgetPosition(widget);
+        });
+    }
+
+    function createCancelledLessonsWidget() {
+        var widget = document.createElement('div');
+        widget.className = 'widget draggable-widget';
+        widget.draggable = true;
+        widget.innerHTML = '<h2>Cancelled lessons</h2><p>balblalbla</p>';
+        makeWidgetDraggable(widget);
+        return widget;
+    }
+
+    function createNoteWidget() {
+        var widget = document.createElement('div');
+        widget.className = 'widget draggable-widget';
+        widget.draggable = true;
+        widget.innerHTML = '<div class="widget-content" contenteditable="true">Write your notes here...</div>';
+        makeWidgetDraggable(widget);
+        return widget;
+    }
+
+    function createUploadPictureWidget() {
+        var widget = document.createElement('div');
+        widget.className = 'widget draggable-widget';
+        widget.draggable = true;
+        widget.innerHTML = '<div class="picture-widget-text" onclick="selectImage()">Click to upload image</div>' +
+            '<form action="/action_page.php" class="picture-widget-form" style="display: none;">' +
+            '<input type="file" id="myFile" name="filename" onchange="uploadImage(this)">' +
+            '</form>';
+        makeWidgetDraggable(widget);
+        return widget;
+    }
+
+    function selectImage() {
+        document.getElementById("myFile").click();
+    }
+
+    function uploadImage(input) {
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = new Image();
+                img.onload = function () {
+                    var container = document.createElement('div');
+                    container.className = 'draggable-widget';
+                    container.style.position = 'absolute';
+                    container.style.left = '50%';
+                    container.style.top = '50%';
+                    container.style.transform = 'translate(-50%, -50%)';
+                    container.appendChild(img);
+                    document.body.appendChild(container);
+                    makeWidgetDraggable(container);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function saveWidgetPosition(widget) {
+        localStorage.setItem(widget.id + '_left', widget.style.left);
+        localStorage.setItem(widget.id + '_top', widget.style.top);
+    }
+
+    
+    function restoreWidgetPositions() {
+        var widgetElements = document.querySelectorAll('.draggable-widget');
+        widgetElements.forEach(function(widget) {
+            var left = localStorage.getItem(widget.id + '_left');
+            var top = localStorage.getItem(widget.id + '_top');
+            if (left && top) {
+                widget.style.left = left;
+                widget.style.top = top;
+            }
+        });
+    }
+
+    window.addEventListener('load', restoreWidgetPositions);
+
+</script>
+
+</body>
+</html>
