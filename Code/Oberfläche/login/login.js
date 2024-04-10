@@ -1,5 +1,4 @@
 function login() {
-  // Dummy-Benutzerdaten für das Beispiel
   var users = [
     {
       email: "user1@example.com",
@@ -21,11 +20,13 @@ function login() {
   });
 
   if (authenticatedUser) {
-    // Benutzer in localStorage speichern
     localStorage.setItem("loggedInUser", JSON.stringify(authenticatedUser));
-    // Weiterleitung zur index.html-Seite
     window.location.href = "../main/index.html";
   } else {
     alert("Falsche Email oder Passwort. Bitte versuchen Sie es erneut.");
   }
+}
+
+function signUp() {
+  
 }

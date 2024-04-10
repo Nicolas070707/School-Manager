@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="sign.js"></script>
+    <link rel="stylesheet" href="sign.css" />
+    <title>School-Manager</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Registrieren</h1>
+        <form>
+            <input
+                type="text"
+                name="email"
+                id="email"
+                placeholder="E-Mail/Benutzername"
+                required
+            />
+            <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Passwort"
+                required
+            />
+            <input
+                type="password"
+                name="confirm_password"
+                id="confirm_password"
+                placeholder="Passwort bestätigen"
+                required
+            />
+            <div class="buttons">
+                <button
+                    type="button"
+                    onclick="signup()"
+                    class="button-52"
+                    role="button"
+                >
+                    Sign Up
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
