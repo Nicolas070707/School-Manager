@@ -153,31 +153,43 @@
     }
 
     // Widgets bewegen
-    function makeWidgetDraggable(widget) {
-        let isDragging = false;
-        let offsetX, offsetY;
-        widget.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            offsetX = e.clientX - widget.getBoundingClientRect().left;
-            offsetY = e.clientY - widget.getBoundingClientRect().top;
-            widget.style.cursor = 'grabbing';
-        });
+// Widgets bewegen
+function makeWidgetDraggable(widget) {
+    let isDragging = false;
+    let offsetX, offsetY;
 
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const x = e.clientX - offsetX;
-                const y = e.clientY - offsetY;
-                widget.style.left = x + 'px';
-                widget.style.top = y + 'px';
-            }
-        });
+    // Berechnen Sie die Grenzen basierend auf den Abmessungen des Browserfensters und den Abmessungen von Header, Footer und Sidebar
+    const headerHeight = document.querySelector('.header').offsetHeight;
+    const footerHeight = document.getElementById('footer').offsetHeight;
+    const sidebarWidth = document.getElementById('sidebar').offsetWidth;
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            widget.style.cursor = 'grab';
-            saveWidgetPosition(widget);
-        });
-    }
+    widget.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - widget.getBoundingClientRect().left;
+        offsetY = e.clientY - widget.getBoundingClientRect().top;
+        widget.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+
+            // Beschränken Sie x und y innerhalb der Grenzen
+            x = Math.max(sidebarWidth, Math.min(x, window.innerWidth - widget.offsetWidth));
+            y = Math.max(headerHeight, Math.min(y, window.innerHeight - widget.offsetHeight - footerHeight));
+
+            widget.style.left = x + 'px';
+            widget.style.top = y + 'px';
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        widget.style.cursor = 'grab';
+        saveWidgetPosition(widget);
+    });
+}
 
     // Widget Inhalt
     function createCancelledLessonsWidget() {
@@ -188,15 +200,32 @@
         makeWidgetDraggable(widget);
         return widget;
     }
-
+    
     function createNoteWidget() {
-        var widget = document.createElement('div');
-        widget.className = 'widget draggable-widget';
-        widget.draggable = true;
-        widget.innerHTML = '<div class="widget-content" contenteditable="true">Write your notes here...</div>';
-        makeWidgetDraggable(widget);
-        return widget;
-    }
+    var widget = document.createElement('div');
+    widget.className = 'widget draggable-widget';
+    widget.draggable = true;
+    
+    // Fügen Sie die Klasse 'widget-placeholder' dem editierbaren Element hinzu
+    var content = document.createElement('div');
+    content.className = 'widget-content widget-placeholder';
+    content.contentEditable = 'true';
+    content.textContent = 'Write your notes here...'; // Standardtext
+    
+    // Fügen Sie einen Event-Listener für das 'focus'-Ereignis hinzu
+    content.addEventListener('focus', function() {
+        // Wenn der Text dem Standardtext entspricht, löschen Sie ihn
+        if (content.textContent === 'Write your notes here...') {
+            content.textContent = '';
+            content.classList.remove('widget-placeholder'); // Entfernen Sie die Klasse, um zu signalisieren, dass der Platzhaltertext entfernt wurde
+        }
+    });
+
+    widget.appendChild(content);
+    makeWidgetDraggable(widget);
+    return widget;
+}
+
 
     function createUploadPictureWidget() {
         var widget = document.createElement('div');
