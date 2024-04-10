@@ -8,7 +8,7 @@ function login() {
     {
       email: "user2@example.com",
       password: "password2",
-      name: "Erika Musterfrau",
+      name: "Michael Leeb",
     },
   ];
 

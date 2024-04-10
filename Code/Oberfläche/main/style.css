@@ -204,10 +204,38 @@
     border-radius: 5px;
     cursor: pointer;
     border: none;
+    width: max-content;
 }
-  
 
+.add-menu {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 20px);
+  right: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  z-index: 1000;
+}
 
+.add-menu.show {
+  display: flex;
+}
+
+.add-menu button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.add-menu button:hover {
+  background-color: #f0f0f0;
+}
 
 
 

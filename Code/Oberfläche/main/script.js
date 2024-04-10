@@ -47,4 +47,31 @@ function displayCurrentDate() {
         popup.style.display = 'block';
     }
 }
+
+function toggleAddMenu() {
+  var addMenu = document.getElementById("addMenu");
+  if (addMenu.classList.contains("show")) {
+    addMenu.classList.remove("show");
+  } else {
+    addMenu.classList.add("show");
+  }
+}
+
+function addNewWidget(widgetType) {
+  var newWidget;
+  switch (widgetType) {
+      case 'Cancelled Lessons':
+          newWidget = createCancelledLessonsWidget();
+          break;
+      case 'Note':
+          newWidget = createNoteWidget();
+          break;
+      case 'Upload Picture':
+          newWidget = createUploadPictureWidget();
+          break;
+      default:
+          return;
+  }
+
+}
  

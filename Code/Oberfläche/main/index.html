@@ -24,13 +24,20 @@
     </div>
     <footer>
       <div class="bottom">
-        <button class="button-56" role="button">Add New Widget</button>
-
+        <button id="addButton" onclick="toggleAddMenu()" class="button-56" role="button">Add New Widget</button>
+        <div id="addMenu" class="add-menu">
+          <button onclick="addNewWidget('Cancelled Lessons')">Cancelled Lessons</button>
+          <button onclick="addNewWidget('Note')">Note</button>
+          <button onclick="addNewWidget('Upload Picture')">Upload Picture</button>
+      </div>
+      
+      <div id="footer">
+      </div>
         <div class="info-container">
           <div class="button-56" onclick="togglePopup()">Info</div>
           <div class="info-popup" id="infoPopup">
             <div class="info-content">
-              <h2>School-Manager</h2>
+              <h1>School-Manager</h1>
               <h2>Über Uns</h2>
               <p>
                 Willkommen auf unserer Website! Wir sind ein Team aus
