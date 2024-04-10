@@ -24,7 +24,19 @@
     <button id="addButton" onclick="toggleAddMenu()">Add New Widget</button>
 </div>
 
-<div id="app"></div>
+<div id="app">
+    <div class="trash-box" id="trashcan">
+        <div class="trash"></div>
+        <div class="trash-top"></div>
+        <div class="trash-btm">
+          <div class="trash-lines">
+            <div class="trash-line"></div>
+            <div class="trash-line"></div>
+          </div>
+        </div>
+      </div>
+      
+</div>
 
 <div class="header">
     <div class="currentDate">
@@ -105,6 +117,23 @@
         }
     });
 
+    const trashcan = document.getElementById('trashcan');
+
+// Drop-Event für den Mülleimer
+trashcan.addEventListener('dragover', (event) => {
+    event.preventDefault(); // Erlaubt das Ablegen von Elementen
+});
+
+trashcan.addEventListener('drop', (event) => {
+    const widgetId = event.dataTransfer.getData('text/plain');
+    const widget = document.getElementById(widgetId);
+    if (widget) {
+        widget.remove(); // Entfernen Sie das Widget aus dem DOM
+        localStorage.removeItem(widgetId + '_left'); // Löschen Sie die gespeicherte Position
+        localStorage.removeItem(widgetId + '_top');
+    }
+});
+
     document.addEventListener('mouseup', () => {
         isDragging = false;
         widget1.style.cursor = 'grab';
@@ -142,6 +171,15 @@
         document.body.appendChild(newWidget);
         toggleAddMenu();
 
+    const newWidgetId = 'widget' + Date.now();
+    newWidget.id = newWidgetId;
+    document.body.appendChild(newWidget);
+
+    // Setzen Sie das draggable Attribut und die Daten für das Drag-Event
+    newWidget.draggable = true;
+    newWidget.addEventListener('dragstart', (event) => {
+        event.dataTransfer.setData('text/plain', newWidgetId);
+    });
        
         var centerX = window.innerWidth / 2 - 100;
         var centerY = window.innerHeight / 2 - 75;

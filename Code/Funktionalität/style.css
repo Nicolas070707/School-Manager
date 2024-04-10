@@ -128,6 +128,105 @@ body {
 }
 
 
+.trash-box {
+  position: fixed; 
+  bottom: 10px;
+  left: 10px; 
+  width: 50px; 
+  height: 50px; 
+  z-index: 1000;
+}
+
+.trash-box:hover .trash-top {
+  transform: translate(-50%, -15%) rotate(-20deg);
+}
+
+.trash-box:hover .trash-btm {
+  transform: translate(-50%, -100%) rotate(5deg);
+}
+
+.trash-box:hover .trash {
+  top: 50%;
+  transform: translate(-42%, -50%) rotate(35deg);
+}
+
+.trash-top {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -15%);
+  width: 80%;
+  height: 15%;
+  background: #95afc0;
+  border-radius: 5px;
+  transform-origin: left bottom;
+  transition: all 0.2s ease-in-out;
+}
+
+.trash-top::before {
+  content: "";
+  position: absolute;
+  bottom: 95%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 30%;
+  height: 80%;
+  background: inherit;
+  border-radius: 5px 5px 0 0;
+}
+
+.trash-btm {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 70%;
+  height: 65%;
+  background: #95afc0;
+  border-radius: 5px;
+  transform-origin: left 70%;
+  transition: all 0.2s ease-in-out;
+}
+
+.trash-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 80%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.trash-line {
+  width: 20%;
+  height: 100%;
+  background: #535c68;
+  border-radius: 3px;
+}
+
+.trash {
+  position: absolute;
+  top: 80%;
+  left: 38%;
+  transform: translate(-38%, -80%) rotate(35deg);
+  width: 40%;
+  height: 40%;
+  background: #dff9fb;
+  border-radius: 2px;
+  transition: all 0.2s ease-in-out;
+}
+
+.trash::before {
+  content: "";
+  position: absolute;
+  transform: translate(30%, -20%) rotate(25deg);
+  width: 100%;
+  height: 100%;
+  background: #c7ecee;
+  border-radius: 2px;
+}
 
 .upload-text {
   text-align: center;
