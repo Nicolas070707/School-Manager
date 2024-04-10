@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/src/style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,6 +88,7 @@
 
     const widget1 = document.getElementById('widget1');
 
+    // Maus
     widget1.addEventListener('mousedown', (e) => {
         isDragging = true;
         offsetX = e.clientX - widget1.getBoundingClientRect().left;
@@ -111,6 +112,7 @@
         localStorage.setItem('widget1_top', widget1.style.top);
     });
 
+    // Menu
     function toggleAddMenu() {
         var addMenu = document.getElementById("addMenu");
         addMenu.classList.toggle("show");
@@ -121,6 +123,7 @@
         }
     }
 
+    // Widget hinzufügen
     function addNewWidget(widgetType) {
         var newWidget;
         switch (widgetType) {
@@ -149,6 +152,7 @@
         toggleAddMenu();
     }
 
+    // Widgets bewegen
     function makeWidgetDraggable(widget) {
         let isDragging = false;
         let offsetX, offsetY;
@@ -175,6 +179,7 @@
         });
     }
 
+    // Widget Inhalt
     function createCancelledLessonsWidget() {
         var widget = document.createElement('div');
         widget.className = 'widget draggable-widget';
@@ -205,6 +210,7 @@
         return widget;
     }
 
+    // Bild Hochladen
     function selectImage() {
         document.getElementById("myFile").click();
     }
@@ -231,7 +237,7 @@
             reader.readAsDataURL(file);
         }
     }
-
+    //local storage
     function saveWidgetPosition(widget) {
         localStorage.setItem(widget.id + '_left', widget.style.left);
         localStorage.setItem(widget.id + '_top', widget.style.top);
