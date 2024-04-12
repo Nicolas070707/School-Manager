@@ -13,47 +13,59 @@
     <title>School-Manager</title>
 </head>
 <body>
-
   <div id="addMenu" class="add-menu">
     <button onclick="addNewWidget('Cancelled Lessons')">Cancelled Lessons</button>
     <button onclick="addNewWidget('Note')">Note</button>
     <button onclick="addNewWidget('Upload Picture')">Upload Picture</button>
 </div>
 
-<div id="footer">
-    <button id="addButton" onclick="toggleAddMenu()">Add New Widget</button>
-</div>
+
 
 <div id="app">
-    <div class="trash-box" id="trashcan">
-        <div class="trash"></div>
-        <div class="trash-top"></div>
-        <div class="trash-btm">
-          <div class="trash-lines">
-            <div class="trash-line"></div>
-            <div class="trash-line"></div>
-          </div>
-        </div>
-      </div>
-      
+    
 </div>
 
-<div class="header">
-    <div class="currentDate">
-        <p id="currentDate"></p>
+<div class="main-content">
+ 
+    </div>
+
+<div class="content-container">
+    <div class="header">
+        <div class="currentDate">
+            <p id="currentDate"></p>
+        </div>
+    </div>
+    <div class="offenefläche">
+        <div id="sidebar">
+            <h2>Sidebar</h2>
+            <p>User</p>
+        </div>
+        <div class="trashcan">
+        <div class="trash-box" id="trashcan">
+            <div class="trash"></div>
+            <div class="trash-top"></div>
+            <div class="trash-btm">
+              <div class="trash-lines">
+                <div class="trash-line"></div>
+                <div class="trash-line"></div>
+              </div>
+            </div>
     </div>
 </div>
 
-<div id="sidebar">
-    <h2>Sidebar</h2>
-    <p>User</p>
+</div>
+<div id="footer">
+    <button id="addButton" onclick="toggleAddMenu()">Add New Widget</button>
+</div>
 </div>
 
+</div>
 <div id="widget1" class="widget draggable-widget" style="top: 50px; left: 50px;">
     <div class="widget-content" contenteditable="true">
         Write your notes here...
     </div>
-</div>
+</div>   
+
 
 <div id="widget2" class="widget draggable-widget" style="top: 150px; left: 150px;">
     <h2>Cancelled lessons</h2>
