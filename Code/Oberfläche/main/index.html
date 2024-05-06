@@ -13,38 +13,36 @@
     </div>
 
     <div class="container">
-       <div class="side">
-         <div class="UC">
-           <span id="loggedInUser">Nicht angemeldet</span>
-         </div>
-       </div>
-     </div>
-     <div class="main">
-      <img  class="img" src="../Pictures/back.jpg" alt="">
-    </div>
-    <div class="trashcan">
-      <div class="trash-box" id="trashcan">
-          <div class="trash"></div>
-          <div class="trash-top"></div>
-          <div class="trash-btm">
-            <div class="trash-lines">
-              <div class="trash-line"></div>
-              <div class="trash-line"></div>
-            </div>
+      <div class="side">
+        <div onclick="window.location.href='../login/login.html'" class="UC">
+          <span id="loggedInUser">Nicht angemeldet</span>
+        </div>
+        <div class="container-todo">
+    
+          <form name="toDoList">
+            <input type="text" name="ListItem" placeholder="ToDo"/>
+          </form>
+          <div id="buttonTodo">Add new Task</div>
+      
+          <ol></ol>
           </div>
-  </div>
-</div>
+      </div>
+    </div>
+    <div class="main">
+      <img class="img" src="../Pictures/back.jpg" alt="" />
+    </div>
+
     <footer>
       <div class="bottom">
-        <button id="addButton" onclick="toggleAddMenu()" class="button-56" role="button">Add New Widget</button>
-        <div id="addMenu" class="add-menu">
-          <button onclick="addNewWidget('Cancelled Lessons')">Cancelled Lessons</button>
-          <button onclick="addNewWidget('Note')">Note</button>
-          <button onclick="addNewWidget('Upload Picture')">Upload Picture</button>
-      </div>
-      
-      <div id="footer">
-      </div>
+        <button
+          id="addButton"
+          onclick="toggleAddMenu()"
+          class="button-56"
+          role="button"
+        >
+          Add New Widget
+        </button>
+        <div id="footer"></div>
         <div class="info-container">
           <div class="button-56" onclick="togglePopup()">Info</div>
           <div class="info-popup" id="infoPopup">
