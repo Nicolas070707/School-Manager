@@ -459,4 +459,48 @@ function addCloseButton(widget) {
   widget.appendChild(closeButton);
 }
 
+// weather
 
+var API_KEY = "1953182eb9009119940b26400ffa251d";
+var lat = "47.4167";
+var lon = "9.7500";
+var maxRequestsPerHour = 6;
+var requestsCount = 0;
+
+function getWeatherInfo() {
+    var request_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=de`;
+
+    fetch(request_url)
+    .then(response => response.json())
+    .then(data => {
+        var weather_description = data.weather[0].description;
+        var temperature = Math.round(data.main.temp - 273.15);
+
+        document.getElementById("weather-description").textContent += weather_description;
+        document.getElementById("temperature").textContent += temperature + "°C";
+
+        // Nach 10 Minuten erneut abfragen
+        setTimeout(getWeatherInfo, 10 * 60 * 1000);
+    })
+    .catch(error => {
+        console.error('Fehler beim Abrufen der Wetterdaten:', error);
+        document.getElementById("weather-description").textContent += "Fehler beim Abrufen der Wetterdaten";
+        document.getElementById("temperature").textContent += "Fehler";
+    });
+
+    // Zähle die Anzahl der Abfragen und überprüfe, ob die maximale Anzahl pro Stunde erreicht ist
+    requestsCount++;
+    if (requestsCount >= maxRequestsPerHour) {
+        setTimeout(resetRequestsCount, 60 * 60 * 1000); // Setze die Anzahl der Abfragen nach einer Stunde zurück
+    }
+}
+
+// Setze die Anzahl der Abfragen zurück
+function resetRequestsCount() {
+    requestsCount = 0;
+}
+
+// Wetterinformationen beim Laden der Seite abrufen
+document.addEventListener("DOMContentLoaded", function() {
+    getWeatherInfo();
+});

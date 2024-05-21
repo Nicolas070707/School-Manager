@@ -121,6 +121,12 @@ ol {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
+.weather {
+  font-size: large;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding-left: 40px;
+}
+
 .side {
   background-color: lightgray;
   display: flex;
