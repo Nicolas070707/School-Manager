@@ -4,27 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../main/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+    
     <title>School-Manager</title>
   </head>
   <body>
+    <div id="addMenu" class="add-menu">
+      <button onclick="addNewWidget('Cancelled Lessons')">Cancelled Lessons</button>
+      <button onclick="addNewWidget('Note')">Note</button>
+      <button onclick="addNewWidget('Upload Picture')">Upload Picture</button>
+    </div>
+    <div id="app"></div>
+    
+
     <div class="top">
       <h1 class="headline">School-Manager</h1>
       <p class="date" id="currentDate"></p>
     </div>
 
     <div class="container">
-      <div class="side">
+      <div class="side" id="sidebar">
         <div onclick="window.location.href='../login/login.html'" class="UC">
           <span id="loggedInUser">Nicht angemeldet</span>
         </div>
         <div class="container-todo">
     
           <form name="toDoList">
-            <input type="text" name="ListItem" placeholder="ToDo"/>
+            <input type="text" name="ListItem" placeholder="Enter your Task"/>
           </form>
-          <div id="buttonTodo">Add new Task</div>
-      
-          <ol></ol>
+          <ol></ol> 
+          <div id="buttonTodo">Add</div>
           </div>
       </div>
     </div>
@@ -33,7 +45,7 @@
     </div>
 
     <footer>
-      <div class="bottom">
+      <div class="bottom" id="footer">
         <button
           id="addButton"
           onclick="toggleAddMenu()"
