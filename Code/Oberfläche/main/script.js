@@ -253,9 +253,20 @@ function createCancelledLessonsWidget() {
   widget.draggable = true;
   widget.style.backgroundImage =
     "linear-gradient(to bottom, #1763A8 0%, #87ACD2 100%)";
-  widget.innerHTML = "<h2>Cancelled lessons</h2><p>balblalbla</p>";
+  widget.innerHTML = `
+      <h2>Cancelled lessons</h2>
+      <div>
+          <label for="week-input">Week:</label>
+          <input type="week" id="week-input" onchange="updateCanceledLessons(this.value)">
+      </div>
+      <div class="cancelled-lessons-content">
+          <img src="loading.gif" alt="Loading..." class="loading-gif">
+          <p>Fehlzeiten werden geladen...</p>
+      </div>
+  `;
+  addCloseButton(widget);
   makeWidgetDraggable(widget);
-  addCloseButton(widget); // Add close button to widget
+  fetchCanceledLessons(); // Initial data load
   return widget;
 }
 
@@ -508,4 +519,119 @@ function resetRequestsCount() {
 // Wetterinformationen beim Laden der Seite abrufen
 document.addEventListener("DOMContentLoaded", function () {
   getWeatherInfo();
+});
+
+// canceld Lessons
+let scriptRunning = false;
+let currentInterval;
+
+function fetchCanceledLessons() {
+  fetch("/output.txt")
+    .then((response) => response.text())
+    .then((data) => {
+      const contentDivs = document.querySelectorAll(
+        ".cancelled-lessons-content"
+      );
+      contentDivs.forEach((contentDiv) => {
+        if (data.trim().length === 0) {
+          contentDiv.innerHTML = "<p>Fehlzeiten werden geladen...</p>";
+        } else {
+          contentDiv.innerHTML = ""; // Clear previous content
+          const lessons = data.split("\n");
+          lessons.forEach((lesson) => {
+            if (lesson.trim().length > 0) {
+              const lessonDiv = document.createElement("div");
+              lessonDiv.textContent = lesson;
+              contentDiv.appendChild(lessonDiv);
+            }
+          });
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching canceled lessons:", error);
+      document
+        .querySelectorAll(".cancelled-lessons-content")
+        .forEach((contentDiv) => {
+          contentDiv.innerHTML = "<p>Fehler beim Laden der Daten</p>";
+        });
+    });
+}
+
+function updateCanceledLessons(week) {
+  if (week) {
+    scriptRunning = false;
+    clearInterval(currentInterval);
+
+    fetch(`/start_script/${week}`)
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        document
+          .querySelectorAll(".cancelled-lessons-content")
+          .forEach((contentDiv) => {
+            contentDiv.innerHTML =
+              '<img src="loading.gif" alt="Loading..." class="loading-gif"><p>Fehlzeiten werden geladen...</p>';
+          });
+
+        const checkOutputFile = () => {
+          fetch("/output.txt")
+            .then((response) => response.text())
+            .then((data) => {
+              if (data.trim().length > 0) {
+                clearInterval(currentInterval); // Stop checking once data is found
+                fetchCanceledLessons();
+                scriptRunning = false;
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching canceled lessons:", error);
+              document
+                .querySelectorAll(".cancelled-lessons-content")
+                .forEach((contentDiv) => {
+                  contentDiv.innerHTML = "<p>Fehler beim Laden der Daten</p>";
+                });
+              clearInterval(currentInterval); // Stop checking on error
+              scriptRunning = false;
+            });
+        };
+
+        // Check the output file periodically
+        currentInterval = setInterval(checkOutputFile, 5000); // Check every 5 seconds
+      })
+      .catch((error) => {
+        console.error("Error starting script:", error);
+        document
+          .querySelectorAll(".cancelled-lessons-content")
+          .forEach((contentDiv) => {
+            contentDiv.innerHTML = "<p>Fehler beim Starten des Skripts</p>";
+          });
+        scriptRunning = false; // Reset the flag in case of error
+      });
+  } else {
+    document
+      .querySelectorAll(".cancelled-lessons-content")
+      .forEach((contentDiv) => {
+        contentDiv.innerHTML = "<p>Wählen Sie eine Woche aus</p>";
+      });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const weekInput = document.querySelector("#week-input");
+  weekInput.addEventListener("change", (event) => {
+    const weekValue = event.target.value;
+    if (weekValue) {
+      const year = weekValue.split("-W")[0];
+      const week = weekValue.split("-W")[1];
+      const formattedWeek = `${year}-W${week}`;
+      updateCanceledLessons(formattedWeek);
+    } else {
+      updateCanceledLessons(null);
+    }
+  });
+});
+
+window.addEventListener("beforeunload", () => {
+  navigator.sendBeacon("/clear_output");
 });
