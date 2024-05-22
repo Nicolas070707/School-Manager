@@ -18,9 +18,6 @@ def find_canceled_lessons(week):
     # Lade die Seite
     driver.get(url)
 
-    # Logindetails
-    username = 'simon.rapp@student.htldornbirn.at'
-    password = 'ShizzyRajsl5++'
 
     # Gib "HTL Dornbirn" ein, ohne das Suchfeld zu spezifizieren
     time.sleep(5)
