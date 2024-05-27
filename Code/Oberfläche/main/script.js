@@ -246,25 +246,24 @@ function makeWidgetDraggable(widget) {
   });
 }
 
-// Widget Inhalt
 function createCancelledLessonsWidget() {
   var widget = document.createElement("div");
-  widget.className = "widget draggable-widget";
+  widget.className = "widget WebUntis-widget";
   widget.draggable = true;
   widget.style.backgroundImage =
     "linear-gradient(to bottom, #1763A8 0%, #87ACD2 100%)";
   widget.innerHTML = `
-      <h2>Cancelled lessons</h2>
-      <div>
+      <h2>WebUntis</h2>
+      <div class="week-input-container">
           <label for="week-input">Week:</label>
           <input type="week" id="week-input" onchange="updateCanceledLessons(this.value)">
       </div>
       <div class="cancelled-lessons-content">
-          <img src="loading.gif" alt="Loading..." class="loading-gif">
           <p>Fehlzeiten werden geladen...</p>
       </div>
+      <button class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
   `;
-  addCloseButton(widget);
+
   makeWidgetDraggable(widget);
   fetchCanceledLessons(); // Initial data load
   return widget;
@@ -388,28 +387,42 @@ function uploadImage(input) {
   var file = input.files[0];
   if (file) {
     if (!file.type.match("image/png")) {
-      alert("Please select a PNG image file.");
+      alert("Bitte wählen Sie eine PNG-Bilddatei aus.");
       return;
     }
     var reader = new FileReader();
     reader.onload = function (e) {
       var img = new Image();
       img.onload = function () {
-        var container = document.createElement("div");
-        container.className = "draggable-widget";
-        container.style.position = "absolute";
-        container.style.left = "50%";
-        container.style.top = "50%";
-        container.style.transform = "translate(-50%, -50%)";
-        container.appendChild(img);
-        document.body.appendChild(container);
-        makeWidgetDraggable(container);
+        var widget = input.closest(".widget");
+        widget.innerHTML = ''; // Löscht den Inhalt des Widgets
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.border = "none"; // Entfernt den Rand um das Bild
+        widget.appendChild(img); // Fügt das Bild dem Widget hinzu
+        var closeButton = document.createElement("button"); // Fügt den Schließen-Button wieder hinzu
+        closeButton.textContent = "X";
+        closeButton.className = "close-button";
+        closeButton.style.position = "absolute";
+        closeButton.style.top = "5px";
+        closeButton.style.right = "5px";
+        closeButton.addEventListener("click", function () {
+          widget.remove(); // Entfernt das Widget, wenn der Schließen-Button geklickt wird
+        });
+        widget.appendChild(closeButton);
+        var button = document.querySelector(".picture-widget-text");
+        button.style.display = "none"; // Versteckt den Button, wenn ein Bild hochgeladen wird
+        widget.classList.add("image-widget"); // Fügt eine Klasse hinzu, um das Widget zu kennzeichnen, wenn ein Bild hochgeladen wird
+        makeWidgetDraggable(widget);
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   }
 }
+
+
+
 
 function makeImageResizable(widget) {
   interact(widget)
@@ -570,8 +583,7 @@ function updateCanceledLessons(week) {
         document
           .querySelectorAll(".cancelled-lessons-content")
           .forEach((contentDiv) => {
-            contentDiv.innerHTML =
-              '<img src="loading.gif" alt="Loading..." class="loading-gif"><p>Fehlzeiten werden geladen...</p>';
+            contentDiv.innerHTML = "<p>Fehlzeiten werden geladen...</p>";
           });
 
         const checkOutputFile = () => {

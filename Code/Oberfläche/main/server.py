@@ -12,6 +12,9 @@ def index():
 def style():
     return send_from_directory('.', 'style.css')
 
+@app.route('/script.js')
+def script():
+    return send_from_directory('.', 'script.js')
 
 @app.route('/start_script/<week>')
 def start_script(week):
@@ -21,7 +24,7 @@ def start_script(week):
             f.write("")
 
         # Start the script with the week parameter
-        subprocess.Popen(['python', 'canceledlessons.py', week])
+        subprocess.Popen(['python', 'Code\Oberfläche\main\canceledlessons.py', week])
         return 'Script started successfully'
     except Exception as e:
         return str(e), 500
