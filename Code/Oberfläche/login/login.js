@@ -21,7 +21,7 @@ function login() {
 
   if (authenticatedUser) {
     localStorage.setItem("loggedInUser", JSON.stringify(authenticatedUser));
-    window.location.href = "../main/index.html";
+    window.location.href = "/index.html";
   } else {
     alert("Falsche Email oder Passwort. Bitte versuchen Sie es erneut.");
   }

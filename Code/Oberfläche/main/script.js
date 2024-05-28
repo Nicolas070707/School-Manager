@@ -539,7 +539,7 @@ let scriptRunning = false;
 let currentInterval;
 
 function fetchCanceledLessons() {
-  fetch("/output.txt")
+  fetch("output.txt")
     .then((response) => response.text())
     .then((data) => {
       const contentDivs = document.querySelectorAll(
@@ -587,7 +587,7 @@ function updateCanceledLessons(week) {
           });
 
         const checkOutputFile = () => {
-          fetch("/output.txt")
+          fetch("output.txt")
             .then((response) => response.text())
             .then((data) => {
               if (data.trim().length > 0) {
@@ -647,3 +647,6 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("beforeunload", () => {
   navigator.sendBeacon("/clear_output");
 });
+
+
+
