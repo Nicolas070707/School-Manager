@@ -19,8 +19,8 @@ def find_canceled_lessons(week):
     driver.get(url)
 
     # Logindetails
-    username = 'simon.rapp@student.htldornbirn.at'
-    password = 'ShizzyRajsl5+'
+    username = ''
+    password = ''
 
     # Gib "HTL Dornbirn" ein, ohne das Suchfeld zu spezifizieren
     time.sleep(5)
@@ -118,12 +118,12 @@ def find_canceled_lessons(week):
     for div in rendered_entry_divs:
         try:
             background_color = div.value_of_css_property('background-color')
-            if background_color == 'rgba(177, 179, 180, 0.7)':
+            if background_color == 'rgba(177, 179, 180, 0.3)':
                 filtered_divs.append(div)
         except StaleElementReferenceException:
             print("Stale element reference exception encountered. Element is no longer in the DOM.")
 
-    print(f"Anzahl der renderedEntry divs mit Hintergrundfarbe 'rgba(177, 179, 180, 0.7)': {len(filtered_divs)}")
+    print(f"Anzahl der renderedEntry divs mit Hintergrundfarbe 'rgba(177, 179, 180, 0.3)': {len(filtered_divs)}")
 
     # Ausgabe der Werte der gefilterten Divs
     lessons = []
